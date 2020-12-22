@@ -1,0 +1,64 @@
+extern const signals_t signals[];
+
+const signals_t signals[] = {
+    {SIGABRT, "SIGABRT"},
+    {SIGALRM, "SIGALRM"},
+    {SIGBUS, "SIGBUS"},
+    {SIGCHLD, "SIGCHLD"},
+    {SIGCLD, "SIGCLD"},
+    {SIGCONT, "SIGCONT"},
+    {SIGFPE, "SIGFPE"},
+    {SIGHUP, "SIGHUP"},
+    {SIGILL, "SIGILL"},
+    {SIGINT, "SIGINT"},
+    {SIGIO, "SIGIO"},
+    {SIGIOT, "SIGIOT"},
+    {SIGKILL, "SIGKILL"},
+    {SIGPIPE, "SIGPIPE"},
+    {SIGPOLL, "SIGPOLL"},
+    {SIGPROF, "SIGPROF"},
+    {SIGPWR, "SIGPWR"},
+    {SIGQUIT, "SIGQUIT"},
+    {SIGSEGV, "SIGSEGV"},
+    {SIGSTKFLT, "SIGSTKFLT"},
+    {SIGSTOP, "SIGSTOP"},
+    {SIGTSTP, "SIGTSTP"},
+    {SIGSYS, "SIGSYS"},
+    {SIGTERM, "SIGTERM"},
+    {SIGTRAP, "SIGTRAP"},
+    {SIGTTIN, "SIGTTIN"},
+    {SIGTTOU, "SIGTTOU"},
+    {SIGURG, "SIGURG"},
+    {SIGUSR1, "SIGUSR1"},
+    {SIGUSR2, "SIGUSR2"},
+    {SIGVTALRM, "SIGVTALRM"},
+    {SIGXCPU, "SIGXCPU"},
+    {SIGXFSZ, "SIGXFSZ"},
+    {SIGWINCH, "SIGWINCH"},
+    {-1, "UNKNOWN"},
+};
+
+char *get_signal_name(int code)
+{
+    for (int i = 0; signals[i].code != -1; i++) {
+        if (signals[i].code == code)
+            return (signals[i].name);
+    }
+    return ("UNKNOWN");
+}
+
+int trace_signal(int pid, int signal)
+{
+    //siginfo_t siginfo;
+    //if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &siginfo)) {
+    //    printf("TEST\n");
+    //}
+    /*
+    if (WIFSIGNALED(signal))
+        printf("Received signal %s\n", get_signal_name(signal));
+    else if (WIFSTOPPED(signal)) {
+        printf("Received signal %s\n", get_signal_name(signal));
+    }
+     */
+    return (0);
+}

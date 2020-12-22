@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/cross_platform.dir/src/main.cpp.o  -o cross_platform 

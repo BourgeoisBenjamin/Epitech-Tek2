@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bourgeois/Epitech/delivery/B4/B4 - Year-End-Project - Indie Studio/bootstrap/cross_platform/src/main.cpp
+iostream
+-
+

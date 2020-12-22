@@ -1,0 +1,625 @@
+#!/bin/bash
+
+function bdsh-main()
+{
+	json_output=0
+
+	while getopts ":f:jh" OPT
+	do
+		case "$OPT" in
+		"f")
+			db_file="$OPTARG"
+			;;
+		"j")
+			json_output=1
+			;;
+		"h")
+			bdsh-usage
+			return 0
+			;;
+		":")
+			bdsh-error "Missing argument after -$OPTARG"
+			;;
+		"?")
+			bdsh-error "Unknown option '-$OPTARG'"
+			;;
+		esac
+	done
+
+	shift $((OPTIND-1))
+
+	if [ -z "${db_file+x}" ]
+	then
+		if [ ! -z "$BDSH_File" ]
+		then
+			db_file="$BDSH_File"
+		elif [ -f .bdshrc ]
+		then
+			db_file="$(cat .bdshrc | grep -Po "(?<=BDSH_File=).*$")"
+		elif [ -f ~/.bdshrc ]
+		then
+			db_file="$(cat ~/.bdshrc | grep -Po "(?<=BDSH_File=).*$")"
+		else
+			bdsh-error "No database file specified"
+		fi
+	fi
+
+	if [ $# -eq 0 ]
+	then
+		bdsh-error "Missing command"
+	fi
+
+	local command="$1"
+	shift
+
+	if ! echo -e "create\ndrop\nshow\ndescribe\nselect\ninsert" | grep "$command" > /dev/null
+	then
+		bdsh-error "Invalid command '$command'"
+	fi
+
+	if [ $json_output -eq 1 -a "$command" != "select" ]
+	then
+		bdsh-error "Invalid combination of -j option and non-select command"
+	fi
+
+	case "$command" in
+	"create")
+		if [ $# -eq 0 ]
+		then
+			bdsh-error "Missing create mode"
+		fi
+
+		local mode="$1"
+		shift
+
+		if ! echo -e "database\ntable" | grep "$mode" > /dev/null
+		then
+			bdsh-error "Invalid create mode '$mode'"
+		fi
+
+		case "$mode" in
+		"database")
+			bdsh-create-db "$@"
+			;;
+		"table")
+			bdsh-create-table "$@"
+			;;
+		esac
+		;;
+	"drop")
+		if [ $# -eq 0 ]
+		then
+			bdsh-error "Missing drop mode"
+		fi
+
+		local mode="$1"
+		shift
+
+		if ! echo -e "database\ntable" | grep "$mode" > /dev/null
+		then
+			bdsh-error "Invalid drop mode '$mode'"
+		fi
+
+		case "$mode" in
+		"database")
+			bdsh-drop-db "$@"
+			;;
+		"table")
+			bdsh-drop-table "$@"
+			;;
+		esac
+		;;
+	"show")
+		bdsh-show "$@"
+		;;
+	"describe")
+		bdsh-describe "$@"
+		;;
+	"select")
+		bdsh-select "$@"
+		;;
+	"insert")
+		bdsh-insert "$@"
+		;;
+	esac
+
+	return 0
+}
+
+################################################################################
+#
+# COMMANDS
+#
+
+function bdsh-create-db()
+{
+	bdsh-check-argc $# 0 0 "create database"
+
+	if [ -e "$db_file" ]
+	then
+		bdsh-error "'$db_file' already exists"
+	fi
+
+	if ! touch "$db_file"
+	then
+		bdsh-error "Database file creation failed"
+	fi
+
+	if ! echo -e "{\n}" > "$db_file"
+	then
+		bdsh-error "Database initialization failed"
+	fi
+}
+
+function bdsh-create-table()
+{
+	bdsh-check-argc $# 2 2 "create table"
+
+	local table_name="$1"
+
+	local db_json="$(bdsh-read-db)"
+
+	if echo "$db_json" | bdsh-get-tables | grep -P "^$table_name$" >/dev/null
+	then
+		bdsh-error "Table '$table_name' already exists"
+	fi
+
+	local table_columns
+	mapfile -t table_columns < <(echo "$2" | tr "," "\n")
+
+	for col in "${table_columns[@]}"
+	do
+		if [ $({
+			for _col in "${table_columns[@]}"
+			do
+				echo "$_col"
+			done
+			} | grep -c "^$col$") -ne 1 ]
+		then
+			bdsh-error "Column '$col' specified twice"
+		fi
+	done
+
+	local tmp_json="$(echo "$db_json" | grep -Pzo "(?s)^.*(?=})" | tr "\0" "\n")"
+	if echo "$tmp_json" | grep -Pz "]\s*$" >/dev/null
+	then
+		tmp_json="$tmp_json,"
+	fi
+
+	tmp_json="$tmp_json$(echo -e "\n  \"desc_$table_name\": [")"
+	for col in "${table_columns[@]}"
+	do
+		tmp_json="$tmp_json$(echo -e "$sep\n    \"$col\"")"
+		local sep=","
+	done
+
+	tmp_json="$tmp_json$(echo -e "\n  ],\n  \"data_$table_name\": [\n  ]")"
+	tmp_json="$tmp_json$(echo -e "\n}")"
+
+	echo "$tmp_json" | bdsh-write-db
+}
+
+function bdsh-drop-db()
+{
+	bdsh-check-argc $# 0 0 "drop database"
+
+	if [ ! -f "$db_file" ]
+	then
+		bdsh-error "'$db_file': No such file"
+	fi
+
+	if ! rm -f "$db_file"
+	then
+		bdsh-error "Database deletion failed"
+	fi
+}
+
+function bdsh-drop-table()
+{
+	bdsh-check-argc $# 1 1 "drop table"
+
+	local table_name="$1"
+
+	local db_json="$(bdsh-read-db)"
+
+	if ! echo "$db_json" | bdsh-get-tables | grep -P "^$table_name$" >/dev/null
+	then
+		bdsh-error "'$table_name': No such table in database"
+	fi
+
+	local tables
+	mapfile -t tables < <(echo "$db_json" | bdsh-get-tables | grep -v "^$table_name$")
+
+	local tmp_json="{"
+	local sep=""
+
+	for table in "${tables[@]}"
+	do
+		tmp_json="$tmp_json$sep$(echo "$db_json" | grep -Pzo "\s*\"desc_$table\"\s*:\s*\[[^\]]*]" | tr "\0" "\n")"
+		tmp_json="$tmp_json,$(echo "$db_json" | grep -Pzo "\s*\"data_$table\"\s*:\s*\[[^\]]*]" | tr "\0" "\n")"
+		sep=","
+	done
+
+	tmp_json="$tmp_json$(echo -e "\n}")"
+
+	echo "$tmp_json" | bdsh-write-db
+}
+
+function bdsh-show()
+{
+	bdsh-check-argc $# 0 0 "show"
+
+	local db_json="$(bdsh-read-db)"
+
+	echo "$db_json" | bdsh-get-tables
+}
+
+function bdsh-describe()
+{
+	bdsh-check-argc $# 1 1 "describe"
+
+	local table_name="$1"
+
+	local db_json="$(bdsh-read-db)"
+
+	if ! echo "$db_json" | bdsh-get-tables | grep "^$table_name$" >/dev/null
+	then
+		bdsh-error "'$table_name': No such table in database"
+	fi
+
+	echo "$db_json" | bdsh-get-columns $table_name
+}
+
+function bdsh-select()
+{
+	bdsh-check-argc $# 2 -1 "select"
+
+	local table_name="$1"
+
+	local db_json="$(bdsh-read-db)"
+
+	if ! echo "$db_json" | bdsh-get-tables | grep "^$table_name$" >/dev/null
+	then
+		bdsh-error "'$table_name': No such table in database"
+	fi
+
+	local table_columns_txt="$(echo "$db_json" | bdsh-get-columns "$table_name")"
+
+	local query_columns
+	mapfile -t query_columns < <(echo "$2" | tr "," "\n")
+
+	for col in "${query_columns[@]}"
+	do
+		if ! echo "$table_columns_txt" | grep "^$col$" >/dev/null
+		then
+			bdsh-error "'$col': No such column in '$table_name'"
+		fi
+	done
+
+	local data="$(echo "$db_json" | grep -Pzo "\"data_$table_name\"\s*:\s*\[\K[^\]]*(?=\s*\])" | tr -d "\0")"
+	mapfile -t data < <(echo "$data" | grep -Pzo "(?<={)[^}]*" | tr -d "\n" | tr "\0" "\n")
+
+	local row_count=${#data[@]}
+
+	mapfile -t table_columns < <(echo "$table_columns_txt")
+
+	declare -A rows
+
+	for col in "${table_columns[@]}"
+	do
+		rows[length,$col]=0
+	done
+
+	for i in $(seq 0 $(($row_count-1)))
+	do
+		for col in "${table_columns[@]}"
+		do
+			local value="$(echo "${data[i]}" | grep -Po "\"$col\"\s*:\s*\"\K[^\"]*(?=\")")"
+			local length=$(echo "$value" | wc -c)
+			if [ ${rows[length,$col]} -lt $length ]
+			then
+				rows[length,$col]=$length
+			fi
+			rows[$i,$col]="$value"
+		done
+	done
+
+	shift 2
+
+	local index
+	mapfile -t index < <(seq 0 $((row_count-1)))
+
+	if [ $# -gt 0 -a "$1" == "where" ]
+	then
+		if [ $# -lt 2 ]
+		then
+			bdsh-error "Missing arguments for where statement"
+		fi
+
+		local where_tmp
+		mapfile -t where_tmp < <(echo "$2" | tr "," "\n")
+
+		declare -A where_values
+
+		for kv in "${where_tmp[@]}"
+		do
+			local col="$(echo "$kv" | cut -d "=" -f 1)"
+			if [ -z "${where_values[$col]+x}" ]
+			then
+				where_values[$col]="$(echo -e "$(echo "$kv" | cut -d "=" -f 2-)")"
+			else
+				where_values[$col]="${where_values[$col]}"$'\n'"$(echo "$kv" | cut -d "=" -f 2-)"
+			fi
+		done
+
+		for col in "${!where_values[@]}"
+		do
+			if ! echo "$table_columns_txt" | grep "^$col$" >/dev/null
+			then
+				bdsh-error "'$col': No such column in '$table_name'"
+			fi
+
+			for i in "${index[@]}"
+			do
+				if ! echo "${where_values[$col]}" | grep "^${rows[$i,$col]}$" >/dev/null
+				then
+					unset index[$i]
+				fi
+			done
+		done
+
+		shift 2
+	fi
+
+	if [ $# -gt 0 -a "$1" == "order" ]
+	then
+		mapfile -t index < <({
+			for i in "${index[@]}"
+			do
+				for col in "${query_columns[@]}"
+				do
+					echo -ne "${rows[$i,$col]}\0"
+				done
+				echo $i
+			done
+		} | sort -t "\0" | cut -d "" -f $((${#query_columns[@]}+1)))
+
+		shift
+	fi
+
+	if [ $# -ne 0 ]
+	then
+		bdsh-error "Invalid request"
+	fi
+
+	if [ $json_output -eq 0 ]
+	then
+		local sep=""
+		local length=0
+		for col in "${query_columns[@]}"
+		do
+			local col_length=$((${rows[length,$col]}+1))
+			length=$(($length+$col_length+2))
+			printf "$sep""%-""$col_length""s" "$col"
+			sep="| "
+		done
+		echo
+		yes "-" | head -$(($length-2)) | tr -d "\n"
+		echo
+		for i in "${index[@]}"
+		do
+			sep=""
+			for col in "${query_columns[@]}"
+			do
+				printf "$sep""%-""$((${rows[length,$col]}+1))""s" "${rows[$i,$col]}"
+				sep="| "
+			done
+			echo
+		done
+	else
+		local sep=""
+		echo -n "["
+		for i in "${index[@]}"
+		do
+			echo -ne "$sep\n  ["
+			local sep2=""
+			for col in "${query_columns[@]}"
+			do
+				echo -ne "$sep2\n    \"${rows[$i,$col]}\""
+				sep2=","
+			done
+			echo -ne "\n  ]"
+			sep=","
+		done
+		echo -e "\n]"
+	fi
+}
+
+function bdsh-insert()
+{
+	bdsh-check-argc $# 2 2 "insert"
+
+	local table_name="$1"
+
+	local db_json="$(bdsh-read-db)"
+
+	if ! echo "$db_json" | bdsh-get-tables | grep "^$table_name$" >/dev/null
+	then
+		bdsh-error "'$table_name': No such table in database"
+	fi
+
+	local table_columns="$(echo "$db_json" | bdsh-get-columns "$table_name")"
+	local insert_tmp
+	mapfile -t insert_tmp < <(echo "$2" | tr "," "\n")
+	declare -A insert_values
+
+	for col in "${insert_tmp[@]}"
+	do
+		col="$(echo "$col" | cut -d "=" -f 1)"
+		if ! echo "$table_columns" | grep "^$col$" >/dev/null
+		then
+			bdsh-error "'$col': No such column in '$table_name'"
+		fi
+	done
+
+	for kv in "${insert_tmp[@]}"
+	do
+		local key="$(echo "$kv" | cut -d "=" -f 1)"
+		if [ -n "${insert_values[$key]+x}" ]
+		then
+			bdsh-error "Column '$col' specified twice"
+		fi
+		insert_values[$key]="$(echo "$kv" | cut -d "=" -f 2-)"
+	done
+
+	local tmp_json="$(echo "$db_json" | grep -Pzo "(?s)^.*\"data_$table_name\"\s*:\s\[[^\]]*?(?=\s*\])" | tr "\0" "\n")"
+	local tmp_json2="$(echo "$db_json" | grep -Pzo "(?s)^.*\"data_$table_name\"\s*:\s\[[^\]]*?\K\s*\].*$" | tr "\0" "\n")"
+	if echo "$tmp_json" | grep -Pz "}\s*$" >/dev/null
+	then
+		tmp_json="$tmp_json,"
+	fi
+
+	mapfile -t table_columns < <(echo "$table_columns")
+
+	tmp_json="$tmp_json$(echo -e "\n    {")"
+	local sep=""
+	for col in "${table_columns[@]}"
+	do
+		tmp_json="$tmp_json$(echo -e "$sep\n      \"$col\": \"${insert_values[$col]}\"")"
+		sep=","
+	done
+
+	tmp_json="$tmp_json$(echo -e "\n    }")"
+
+	echo "$tmp_json$tmp_json2" | bdsh-write-db
+}
+
+################################################################################
+#
+# MACROS
+#
+
+function bdsh-read-db()
+{
+	if [ ! -f "$db_file" ]
+	then
+		bdsh-error "'$db_file': database file missing"
+	fi
+
+	cat "$db_file" | tr -d "\r"
+}
+
+function bdsh-write-db()
+{
+	if ! touch "$db_file" 2>/dev/null
+	then
+		bdsh-error "Cannot write to '$db_file'"
+	fi
+
+	cat > "$db_file"
+}
+
+function bdsh-get-tables()
+{
+	grep -Pzo "(?<=\"desc_)[^\"]*(?=\"\s*:)" |
+		tr "\0" "\n"
+}
+
+function bdsh-get-columns()
+{
+	local desc="$(grep -Pzo "\"desc_$1\"\s*:\s*\[\K[^\]]*(?=\s*\])" | tr -d "\0")"
+	echo "$desc" | grep -Pzo "(?<=\")[^\"]*(?=\"\s*(?:,|$))" | tr "\0" "\n"
+}
+
+function bdsh-check-argc()
+{
+	if [ $1 -lt $2 ]
+	then
+		bdsh-error "Missing arguments for $4 command"
+	elif [ $3 -ne -1 -a $1 -gt $3 ]
+	then
+		bdsh-error "Too many arguments for $4 command"
+	fi
+}
+
+function bdsh-error()
+{
+	echo "$0: $@" >&2
+	exit 1
+}
+
+function bdsh-usage()
+{
+	echo "Usage: $0 [OPTION]... [COMMAND] [REQUEST]
+OPTION:
+  -h				display usage
+  -f FILE			json database file
+  -j				json formated output for select command
+COMMAND and REQUEST:
+  create		create database files and tables
+			Exemple:
+			   ./bdsh -f file.json create database
+			   ./bdsh -f file.json create table user id,firstname,lastname
+			   ./bdsh -f file.json create table age id,age
+  drop			drop database files and tables
+			Exemple:
+			   ./bdsh -f file.json drop database
+			   ./bdsh -f file.json drop table user
+			   ./bdsh -f file.json drop table age
+  show			show the list of existing tables
+			Exemple:
+			   ./bdsh -f file.json show
+			   user
+			   age
+  describe		describe table structure
+			Exemple:
+			   ./bdsh -f file.json describe user
+			   id
+			   firstname
+			   lastname
+  select		display data from database
+			Exemple:
+			   ./bdsh -f file.json select user firstname,lastname
+			   firstname    | lastname
+			   -------------------------
+			   John         | SMITH
+			   Robert John  | WILLIAMS
+			   Lisa         | SIMPSON
+			                | SMITH
+			   Laura        | SMITH
+			                |
+			   ./bdsh -f file.json select user lastname,firstname order
+			   lastname   | firstname
+			   -------------------------
+			             |
+			   SIMPSON   | Lisa
+			   SMITH     |
+			   SMITH     | John
+			   SMITH     | Laura
+			   WILLIAMS  | Robert John
+			   ./bdsh -f file.json select user firstname,lastname where lastname=SMITH
+			   firstname    | lastname
+			   -------------------------
+			   John         | SMITH
+			                | SMITH
+			   Laura        | SMITH
+			   ./bdsh -f file.json select user firstname,lastname where lastname=SMITH order
+			   firstname    | lastname
+			   -------------------------
+			                | SMITH
+			   John         | SMITH
+			   Laura        | SMITH
+  insert		insert data in database
+			Exemple:
+			   ./bdsh -f file.json insert user id=1,firstname=John,lastname=SMITH
+			   ./bdsh -f file.json insert user id=4,firstname=Robert John,lastname=WILLIAMS
+			   ./bdsh -f file.json insert user id=2,firstname=Lisa,lastname=SIMPSON
+			   ./bdsh -f file.json insert user id=10,lastname=SMITH
+			   ./bdsh -f file.json insert user firstname=Laura,lastname=SMITH
+			   ./bdsh -f file.json insert user id=9
+			   ./bdsh -f file.json insert age id=1,age=42"
+}
+
+################################################################################
+
+bdsh-main "$@"

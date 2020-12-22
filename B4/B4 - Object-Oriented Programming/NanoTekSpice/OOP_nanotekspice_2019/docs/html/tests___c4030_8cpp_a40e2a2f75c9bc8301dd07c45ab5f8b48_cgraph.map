@@ -1,0 +1,9 @@
+<map id="Test" name="Test">
+<area shape="rect" id="node2" href="$classnts_1_1_a_component.html#ab2838ee1da55a59e5d0b796c4c34da5a" title="nts::AComponent::setLink" alt="" coords="112,85,301,112"/>
+<area shape="rect" id="node6" href="$classnts_1_1_c4030.html#afa600f80ef9d61b88d99bcd67f945d49" title="nts::C4030::run" alt="" coords="147,169,267,196"/>
+<area shape="rect" id="node8" href="$classnts_1_1_a_component.html#a545f80ab16ade726ac2deea897ccd006" title="nts::AComponent::getTristate" alt="" coords="101,220,312,247"/>
+<area shape="rect" id="node3" href="$classnts_1_1_a_component.html#a34dba20a5ccf6118755344e485b32ca9" title="nts::AComponent::getLinkPin" alt="" coords="360,5,571,32"/>
+<area shape="rect" id="node4" href="$classnts_1_1_utility.html#a744f5025a754dadcf9b4ce46b46e1302" title="nts::Utility::isOutput" alt="" coords="389,56,541,83"/>
+<area shape="rect" id="node5" href="$classnts_1_1_output_component.html#a5aed9d288b856afd78dfa2bc563b9b70" title="nts::OutputComponent\l::setIsLinked" alt="" coords="381,107,550,149"/>
+<area shape="rect" id="node7" href="$classnts_1_1_utility.html#a86ebf96666e0e5598063ca6b4d1121b8" title="nts::Utility::xorGate" alt="" coords="391,173,540,200"/>
+</map>

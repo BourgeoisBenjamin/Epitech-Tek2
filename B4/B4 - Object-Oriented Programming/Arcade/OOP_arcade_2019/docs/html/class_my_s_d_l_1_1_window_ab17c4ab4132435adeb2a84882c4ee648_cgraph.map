@@ -1,0 +1,6 @@
+<map id="MySDL::Window::draw" name="MySDL::Window::draw">
+<area shape="rect" id="node2" href="$class_my_s_d_l_1_1_sprite.html#a06e66f434baa451d3a3bf971515e96af" title="MySDL::Sprite::getRect" alt="" coords="231,5,401,32"/>
+<area shape="rect" id="node3" href="$class_my_s_d_l_1_1_sprite.html#a29f151e6c329a4b55e8e99e00d2730b4" title="MySDL::Sprite::getTexture" alt="" coords="221,56,411,83"/>
+<area shape="rect" id="node4" href="$class_my_s_d_l_1_1_sprite.html#a869c0b847f53cfb46cfb30d5b27f600f" title="MySDL::Sprite::getRotation" alt="" coords="219,107,413,133"/>
+<area shape="rect" id="node5" href="$class_my_s_d_l_1_1_sprite.html#a0dabd05b78967dba5a2b779c8af91cdd" title="MySDL::Sprite::getColor" alt="" coords="229,157,403,184"/>
+</map>

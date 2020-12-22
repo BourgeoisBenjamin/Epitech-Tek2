@@ -1,0 +1,6 @@
+<map id="nts::NTSError" name="nts::NTSError">
+<area shape="rect" id="node3" href="$classnts_1_1_component_error.html" title="nts::ComponentError" alt="" coords="5,155,161,181"/>
+<area shape="rect" id="node4" href="$classnts_1_1_file_error.html" title="nts::FileError" alt="" coords="185,155,288,181"/>
+<area shape="rect" id="node5" href="$classnts_1_1_syntax_error.html" title="nts::SyntaxError" alt="" coords="312,155,439,181"/>
+<area shape="rect" id="node6" href="$classnts_1_1_user_error.html" title="nts::UserError" alt="" coords="463,155,573,181"/>
+</map>

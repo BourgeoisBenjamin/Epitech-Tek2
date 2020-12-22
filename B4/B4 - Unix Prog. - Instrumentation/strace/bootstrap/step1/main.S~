@@ -1,0 +1,7 @@
+SECTION .text
+    global main
+
+main:
+    MOV RAX, 1
+    MOV RBX, 0
+    int 80h

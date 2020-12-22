@@ -1,0 +1,7 @@
+.idea
+*.o
+*.gnco
+*.gnda
+*.gch
+*.vscode
+vgcore.*

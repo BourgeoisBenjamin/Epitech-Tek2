@@ -1,0 +1,6 @@
+.idea
+src/UnitsFile.cpp
+*.o
+*.gcno
+*.gcda
+.vscode

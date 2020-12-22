@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3a06eb5c-e5ec-4a19-9eef-33e9a9177707" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_2019/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_2019/tests/tests_redirect.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_2019/tests/unittest.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/src/disp_args.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/src/helloworld_printf.asm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/src/helloworld_write.asm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/src/main.asm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/src/main.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/src/strlen.asm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/tests/tests_redirect.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ASM_minilibc_bootstrap_2019/tests/unittest.hpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/ASM_minilibc_2019" />
+  </component>
+  <component name="ProjectId" id="1Xf5Lpjuj8h2JK2DpEXCXju5IzG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ASM_minilibc_2019" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3a06eb5c-e5ec-4a19-9eef-33e9a9177707" name="Default Changelist" comment="" />
+      <created>1581424254448</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581424254448</updated>
+      <workItem from="1581424256043" duration="614000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="743" y="298" width="424" height="482" key="FileChooserDialogImpl" timestamp="1581425308911">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="743" y="298" width="424" height="482" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1581425308911" />
+  </component>
+</project>

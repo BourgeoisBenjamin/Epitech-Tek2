@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="PSU_strace_2019" targetName="PSU_strace_2019" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b0731d8e-e2ba-4f4b-a15e-59c4c75f1572" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/PSU_strace_2019" />
+  </component>
+  <component name="ProjectId" id="1ZslUZ4CFb710cUurDjwp1KYr8J" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ftrace/bootstrap" />
+  </component>
+  <component name="RunManager">
+    <configuration name="PSU_strace_2019" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PSU_strace_2019" TARGET_NAME="PSU_strace_2019" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="PSU_strace_2019" RUN_TARGET_NAME="PSU_strace_2019">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b0731d8e-e2ba-4f4b-a15e-59c4c75f1572" name="Default Changelist" comment="" />
+      <created>1585635698205</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585635698205</updated>
+      <workItem from="1585635700018" duration="241000" />
+      <workItem from="1585636119589" duration="35000" />
+      <workItem from="1585636169117" duration="56000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="743" y="303" width="428" height="487" key="FileChooserDialogImpl" timestamp="1585636212638">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="743" y="303" width="428" height="487" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1585636212638" />
+  </component>
+</project>

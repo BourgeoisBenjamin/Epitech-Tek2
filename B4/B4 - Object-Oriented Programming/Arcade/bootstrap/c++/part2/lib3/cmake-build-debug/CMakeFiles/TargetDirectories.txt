@@ -1,0 +1,3 @@
+/home/bourgeois/Epitech/delivery/B4/B4 - Object-Oriented Programming/Arcade/bootstrap/c++/lib3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/bourgeois/Epitech/delivery/B4/B4 - Object-Oriented Programming/Arcade/bootstrap/c++/lib3/cmake-build-debug/CMakeFiles/lib3.dir
+/home/bourgeois/Epitech/delivery/B4/B4 - Object-Oriented Programming/Arcade/bootstrap/c++/lib3/cmake-build-debug/CMakeFiles/edit_cache.dir

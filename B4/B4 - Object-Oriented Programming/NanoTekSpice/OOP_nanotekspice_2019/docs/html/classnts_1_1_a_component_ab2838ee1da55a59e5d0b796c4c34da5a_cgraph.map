@@ -1,0 +1,5 @@
+<map id="nts::AComponent::setLink" name="nts::AComponent::setLink">
+<area shape="rect" id="node2" href="$classnts_1_1_a_component.html#a34dba20a5ccf6118755344e485b32ca9" title="nts::AComponent::getLinkPin" alt="" coords="243,5,453,32"/>
+<area shape="rect" id="node3" href="$classnts_1_1_utility.html#a744f5025a754dadcf9b4ce46b46e1302" title="nts::Utility::isOutput" alt="" coords="272,56,424,83"/>
+<area shape="rect" id="node4" href="$classnts_1_1_output_component.html#a5aed9d288b856afd78dfa2bc563b9b70" title="nts::OutputComponent\l::setIsLinked" alt="" coords="263,107,433,149"/>
+</map>

@@ -1,0 +1,28 @@
+<map id="include/nanotekspice.hpp" name="include/nanotekspice.hpp">
+<area shape="rect" id="node2" href="$main_8cpp.html" title="src/main.cpp" alt="" coords="1790,80,1895,107"/>
+<area shape="rect" id="node3" href="$nanotekspice_8cpp.html" title="src/nanotekspice.cpp" alt="" coords="1919,80,2078,107"/>
+<area shape="rect" id="node4" href="$unittest_8hpp.html" title="tests/unittest.hpp" alt="" coords="2103,80,2239,107"/>
+<area shape="rect" id="node5" href="$tests___c4001_8cpp.html" title="tests/tests_C4001.cpp" alt="" coords="5,155,171,181"/>
+<area shape="rect" id="node6" href="$tests___c4008_8cpp.html" title="tests/tests_C4008.cpp" alt="" coords="195,155,360,181"/>
+<area shape="rect" id="node7" href="$tests___c4011_8cpp.html" title="tests/tests_C4011.cpp" alt="" coords="384,155,549,181"/>
+<area shape="rect" id="node8" href="$tests___c4013_8cpp.html" title="tests/tests_C4013.cpp" alt="" coords="573,155,739,181"/>
+<area shape="rect" id="node9" href="$tests___c4017_8cpp.html" title="tests/tests_C4017.cpp" alt="" coords="763,155,928,181"/>
+<area shape="rect" id="node10" href="$tests___c4030_8cpp.html" title="tests/tests_C4030.cpp" alt="" coords="952,155,1117,181"/>
+<area shape="rect" id="node11" href="$tests___c4040_8cpp.html" title="tests/tests_C4040.cpp" alt="" coords="1141,155,1307,181"/>
+<area shape="rect" id="node12" href="$tests___c4069_8cpp.html" title="tests/tests_C4069.cpp" alt="" coords="1331,155,1496,181"/>
+<area shape="rect" id="node13" href="$tests___c4071_8cpp.html" title="tests/tests_C4071.cpp" alt="" coords="1520,155,1685,181"/>
+<area shape="rect" id="node14" href="$tests___c4081_8cpp.html" title="tests/tests_C4081.cpp" alt="" coords="1709,155,1875,181"/>
+<area shape="rect" id="node15" href="$tests___c4094_8cpp.html" title="tests/tests_C4094.cpp" alt="" coords="1899,155,2064,181"/>
+<area shape="rect" id="node16" href="$tests___c4514_8cpp.html" title="tests/tests_C4514.cpp" alt="" coords="2088,155,2253,181"/>
+<area shape="rect" id="node17" href="$tests__compute_8cpp.html" title="tests/tests_compute.cpp" alt="" coords="2277,155,2459,181"/>
+<area shape="rect" id="node18" href="$tests__cut_comment_8cpp.html" title="tests/tests_cutComment.cpp" alt="" coords="2483,155,2691,181"/>
+<area shape="rect" id="node19" href="$tests___dump_8cpp.html" title="tests/tests_Dump.cpp" alt="" coords="2715,155,2877,181"/>
+<area shape="rect" id="node20" href="$tests___file_class_8cpp.html" title="tests/tests_FileClass.cpp" alt="" coords="2901,155,3083,181"/>
+<area shape="rect" id="node21" href="$tests__is_chipset_part_8cpp.html" title="tests/tests_isChipsetPart.cpp" alt="" coords="3107,155,3317,181"/>
+<area shape="rect" id="node22" href="$tests__is_link_part_8cpp.html" title="tests/tests_isLinkPart.cpp" alt="" coords="3341,155,3528,181"/>
+<area shape="rect" id="node23" href="$tests___parser_class_8cpp.html" title="tests/tests_ParserClass.cpp" alt="" coords="3553,155,3751,181"/>
+<area shape="rect" id="node24" href="$tests__redirect_8cpp.html" title="tests/tests_redirect.cpp" alt="" coords="3775,155,3950,181"/>
+<area shape="rect" id="node25" href="$tests__set_link_8cpp.html" title="tests/tests_setLink.cpp" alt="" coords="3975,155,4145,181"/>
+<area shape="rect" id="node26" href="$tests__set_tristate_pin_8cpp.html" title="tests/tests_setTristatePin.cpp" alt="" coords="4170,155,4382,181"/>
+<area shape="rect" id="node27" href="$tests___utility_8cpp.html" title="tests/tests_Utility.cpp" alt="" coords="4407,155,4569,181"/>
+</map>

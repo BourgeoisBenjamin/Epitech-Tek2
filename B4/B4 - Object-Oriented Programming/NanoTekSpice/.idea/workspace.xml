@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d32f5f3a-4ca2-4fd2-8816-eb3cb6695409" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/OOP_nanotekspice_2019" />
+  </component>
+  <component name="ProjectId" id="1XIEVec8kkPjwye7emT2I7IlYxD" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/OOP_nanotekspice_2019" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d32f5f3a-4ca2-4fd2-8816-eb3cb6695409" name="Default Changelist" comment="" />
+      <created>1580725233165</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580725233165</updated>
+      <workItem from="1580725234704" duration="2265000" />
+      <workItem from="1580732541642" duration="38000" />
+      <workItem from="1580732598095" duration="74000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="743" y="298" width="424" height="482" key="FileChooserDialogImpl" timestamp="1580732668676">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="743" y="298" width="424" height="482" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1580732668676" />
+    <state width="640" height="204" key="ImportCMakeProjectWizard.bottomPanel" timestamp="1580732656336">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="640" height="204" key="ImportCMakeProjectWizard.bottomPanel/0.0.1920.1080@0.0.1920.1080" timestamp="1580732656336" />
+    <state width="640" height="476" key="ImportCMakeProjectWizard.topPanel" timestamp="1580732656336">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="640" height="476" key="ImportCMakeProjectWizard.topPanel/0.0.1920.1080@0.0.1920.1080" timestamp="1580732656336" />
+    <state x="456" y="175" key="SettingsEditor" timestamp="1580732579969">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="456" y="175" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1580732579969" />
+  </component>
+</project>

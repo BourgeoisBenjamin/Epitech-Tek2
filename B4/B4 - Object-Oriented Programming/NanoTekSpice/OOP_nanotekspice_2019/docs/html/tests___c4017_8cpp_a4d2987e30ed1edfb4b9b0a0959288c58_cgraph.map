@@ -1,0 +1,6 @@
+<map id="Test" name="Test">
+<area shape="rect" id="node2" href="$classnts_1_1_a_component.html#a91138b442a7e055feb8f621b798328ef" title="nts::AComponent::setTristatePin" alt="" coords="101,5,332,32"/>
+<area shape="rect" id="node3" href="$classnts_1_1_a_component.html#ada3fa46bd49f46bf3785ec25b34359a7" title="nts::AComponent::setClock\lState" alt="" coords="117,57,316,98"/>
+<area shape="rect" id="node4" href="$classnts_1_1_c4017.html#a497c97211a6a34f66615893e13b8f842" title="nts::C4017::run" alt="" coords="157,123,277,149"/>
+<area shape="rect" id="node5" href="$classnts_1_1_a_component.html#a545f80ab16ade726ac2deea897ccd006" title="nts::AComponent::getTristate" alt="" coords="111,173,322,200"/>
+</map>

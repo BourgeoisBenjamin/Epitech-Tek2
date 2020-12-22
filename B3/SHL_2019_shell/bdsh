@@ -1,0 +1,352 @@
+#!/bin/sh
+
+function main
+{
+    noArg "$@"
+    checkOptions "$@"
+}
+
+###
+# Error and Help Function
+###
+
+function noArg
+{
+    if [ $# -eq 0 ];
+    then
+        syntaxError
+        exit 0
+    fi
+}
+
+function syntaxError
+{
+    echo "Syntax Error
+    See : ./bdsh -h" 1>&2
+    exit 1
+}
+
+function checkOptions
+{
+    while getopts ":f:hj" opt; do
+      case ${opt} in
+        f )
+            datafile=$OPTARG
+        ;;
+        h )
+            usage
+        ;;
+        j )
+            formatOption=true
+        ;;
+        \? )
+            echo "Invalid option: $OPTARG" 1>&2
+            syntaxError
+        ;;
+        : )
+            echo "Invalid option: $OPTARG requires an argument" 1>&2
+            syntaxError
+        ;;
+      esac
+    done
+    shift $((OPTIND -1))
+
+    if [ "$(echo $1 | head -c 1)" = "-" ]; then
+        syntaxError
+    elif [ "$1" = "create" ]; then
+        _create "$@"
+    elif [ "$1" = "insert" ]; then
+        _insert "$@"
+    elif [ "$1" = "describe" ]; then
+        _describe "$@"
+    elif [ "$1" = "select" ]; then
+        _select "$@"
+    else
+        syntaxError
+    fi
+}
+
+function checkDataFile
+{
+    if [ ! -z "$datafile" ]; then
+        return 0
+    fi
+    if [ ! -z "$BDSH_File" ]; then
+        datafile = $BDSH_File
+        return 0
+    fi
+    if [ -e ".bdshrc" ]; then
+        datafile="$(cat .bdshrc)"
+        return 0
+    fi
+    echo "Please create database before" 1>&2
+    syntaxError
+}
+
+function checkDatabase
+{
+    checkDataFile
+    if [ ! -e "$datafile" ]; then
+        echo "Please create database before" 1>&2
+        exit 1
+    fi
+}
+
+function checkTable
+{
+    if [ $# -ne 4 ]; then
+        syntaxError
+    fi
+    grep_find=$(grep -c desc_"$3" "$datafile")
+    if [ $grep_find -ne 0 ]; then
+        echo "Table already exist" 1>&2
+        exit 1
+    fi
+}
+
+function checkTableExist
+{
+    find=$(grep -c desc_"$2" $datafile)
+    if [ $find -eq 0 ]; then
+        echo "Table not found" 1>&2
+        exit 1
+    fi
+}
+
+function checkTableDataExist
+{
+    find=$(grep -c desc_"$2" $datafile)
+    if [ $find -eq 0 ]; then
+        echo "Table not found" 1>&2
+        exit 1
+    fi
+    find=$(grep -c data_"$2" $datafile)
+    if [ $find -eq 0 ]; then
+        echo "Data not found" 1>&2
+        exit 1
+    fi
+}
+
+function usage
+{
+    echo "Usage: ./bdsh [OPTION]... [COMMAND] [REQUEST]
+OPTION:
+    -h              display usage
+    -f FILE         json database file
+    -j              json formated output for select command
+COMMAND and REQUEST:
+        create      create database
+                    Exemple:
+                        ./bdsh -f file.json create database
+                        ./bdsh -f file.json create table user id,firstname,lastname
+                        ./bdsh -f file.json create table age id,age
+
+        insert      insert data in database
+                    Exemple:
+                        ./bdsh -f file.json insert user id=1,firstname=John,lastname=SMITH
+                        ./bdsh -f file.json insert user id=4,firstname=Robert\ John,lastname=WILLIAMS
+                        ./bdsh -f file.json insert user id=2,firstname=Lisa,lastname=SIMPSON
+                        ./bdsh -f file.json insert user id=10,lastname=SMITH
+                        ./bdsh -f file.json insert user firstname=Laura,lastname=SMITH
+                        ./bdsh -f file.json insert user id=9
+                        ./bdsh -f file.json insert age id=1,age=42
+
+        describe    describe table structure
+                    Exemple:
+                        ./bdsh -f file.json describe user
+                        id
+                        firstname
+                        lastname
+
+        select      display data from database
+                    Exemple:
+                        ./bdsh -f file.json select user firstname,lastname
+                        firstname    | lastname
+                        -------------------------
+                        John         | SMITH
+                        Robert John  | WILLIAMS
+                        Lisa         | SIMPSON
+                                     | SMITH
+                        Laura        | SMITH
+                                     |
+                        ./bdsh -f file.json select user lastname,firstname order
+                        lastname  | firstname
+                        -------------------------
+                                  |
+                        SIMPSON   | Lisa
+                        SMITH     |
+                        SMITH     | John
+                        SMITH     | Laura
+                        WILLIAMS  | Robert John"
+    exit 0
+}
+
+###
+# Create Function
+###
+
+function _create_database
+{
+    if [ -e "$datafile" ]; then
+        echo "$datafile : already exists" 1>&2
+        exit 1
+    elif [ $(touch "$datafile") ]; then
+        echo "$datafile : Database creation failed" 1>&2
+        exit 1
+    fi
+    if [ $(echo -e '{}' > "$datafile") ]; then
+        echo "$datafile : Init database failed but exist" 1>&2
+        exit 1
+    fi
+}
+
+function _insert_table
+{
+    line_to_insert=$(grep -m1 -n "data_" $datafile | cut -d : -f 1);
+    end="\ \ ],\r"
+    if [ -z $line_to_insert ]; then
+        line_to_insert=$(wc -l $datafile | cut -d " " -f 1)
+        end="\ \ ]\r"
+    fi
+    table_name=$3
+    table_elem=$(echo $4 | tr "," "\n")
+    nb_elem=$(echo $table_elem | wc -w)
+    to_add="\ \ \"desc_"$table_name"\": [\r\n"
+    i=0
+
+    for elem in $table_elem; do
+        i=$((i+1))
+        to_add+="\ \ \ \ "
+        to_add+="\"$elem\""
+        if [ $i -eq $nb_elem ]; then
+            to_add+="\r\n"
+        else
+            to_add+=",\r\n"
+        fi
+    done
+    to_add+=$end
+
+    $(sed -i $line_to_insert'i '"$to_add" "$datafile" )
+}
+
+function _create_table
+{
+    checkDatabase
+    checkTable "$@"
+    _insert_table "$@"
+}
+
+function _create()
+{
+    checkDataFile
+    if [ "$2" = "database" ]; then
+        _create_database "$@"
+    elif [ "$2" = "table" ]; then
+        _create_table "$@"
+    else
+        syntaxError
+    fi
+}
+
+function _describe()
+{
+    checkDataFile
+    checkTableExist $@
+    table=$(cat $datafile | tr -d "[:space:]" | sed 's/^.*desc_'$2'/desc_'$2'/' | sed 's/].*//' | sed 's/.*\[//')
+    echo $table | tr ',' '\n' | tr -d '"'
+}
+
+function checkFieldsExist
+{
+    fields=$(cat $datafile | tr -d "[:space:]" | sed 's/^.*desc_'$2'/desc_'$2'/' | sed 's/].*//' | sed 's/.*\[//')
+    fieldsWanted=$(echo $3 | tr ',' ' ')
+    for field in $fieldsWanted; do
+        find=$(echo "$fields" | grep -m1 -n "$field")
+        if [ -z $find ]; then
+            echo "Field: "$field" not found" 1>&2
+            exit 1
+        fi
+    done
+}
+
+function formatHeader()
+{
+    fields=$(echo $3 | tr ',' ' ')
+
+    maxLen=0
+
+    for field in $fields; do
+        if [ ${#field} -gt $maxLen ]; then
+            maxLen=${#field}
+        fi
+    done
+}
+
+function getData()
+{
+    jsonObject=$(cat $datafile | tr -d "[:space:]" | sed 's/^.*data_'$2'/data_'$2'/' | sed 's/].*//' | sed 's/.*\[//')
+    jsonObject=$(echo $jsonObject | tr ',' ' ' | tr -d '"' | tr -d "{" | tr -d "}")
+
+    for object in $jsonObject; do
+        for field in $fields; do
+            temp_field=$(echo $object | cut -d : -f 1)
+            if [ $temp_field = $field ]; then
+                if [ ${#temp_field} -gt $maxLen ]; then
+                    maxLen=${#temp_field}
+                fi
+                temp_data=$(echo $object | cut -d':' -f2-)
+                if [ ${#temp_data} -gt $maxLen ]; then
+                    maxLen=${#temp_data}
+                fi
+                if [ -z $temp_data ]; then
+                    dataSelect+="None"
+                else
+                    dataSelect+=$temp_data
+                fi
+                dataSelect+=" "
+            fi
+        done
+    done
+}
+
+function displayData
+{
+    printf "%-"$maxLen"s | %s\\r\\n" $fields
+    nb=$((maxLen*2+1))
+    for i in `seq 1 $nb`;
+    do
+        printf "-"
+    done
+    printf "\\r\\n"
+    i=0
+    nbColum=$(echo "$fields" | wc -w)
+    for data in $dataSelect; do
+        i=$((i+1))
+        if [ $data = "None" ]; then
+            data=""
+        fi
+        if [ `expr $i % $nbColum` -eq 0 ]; then
+            printf "%s\\r\\n" $data
+        else
+            printf "%-"$maxLen"s | " $data
+        fi
+    done
+}
+
+function _select()
+{
+    dataSelect=""
+    checkDataFile
+    checkTableDataExist $@
+    checkFieldsExist $@
+    formatHeader $@
+    getData $@
+    maxLen=$((maxLen+2))
+    displayData $@
+}
+
+###
+# Main body of script starts here
+###
+
+main "$@"

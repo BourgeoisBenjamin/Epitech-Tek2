@@ -1,0 +1,8 @@
+<map id="Test" name="Test">
+<area shape="rect" id="node2" href="$classnts_1_1_i_component.html#a7ead43b1f8239f00cd743f7b12c6ac2b" title="nts::IComponent::setLink" alt="" coords="122,5,306,32"/>
+<area shape="rect" id="node3" href="$classnts_1_1_i_component.html#a5ae53cde2053fb571a707ecf9882dba3" title="nts::IComponent::setTristatePin" alt="" coords="101,56,327,83"/>
+<area shape="rect" id="node4" href="$classnts_1_1_i_component.html#afb3285165be3cd8df3072f66d3ae0f8e" title="nts::IComponent::compute" alt="" coords="117,107,311,133"/>
+<area shape="rect" id="node5" href="$classnts_1_1_n_t_s_error.html#a997cabbe2d2a72cd354752564235000a" title="nts::NTSError::what" alt="" coords="141,157,287,184"/>
+<area shape="rect" id="node6" href="$classnts_1_1_n_t_s_error.html#a9b10a8ad8e093cb3ff7b324ff3ca65dc" title="nts::NTSError::getComponent" alt="" coords="109,208,319,235"/>
+<area shape="rect" id="node7" href="$classnts_1_1_i_component.html#a187c6ba870cb5ead6db3bfadcced4a38" title="nts::IComponent::dump" alt="" coords="127,259,301,285"/>
+</map>

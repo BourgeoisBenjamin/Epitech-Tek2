@@ -1,0 +1,4 @@
+/snap/clion/103/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/bourgeois/Epitech/delivery/B4/B4 - Object-Oriented Programming/Arcade/bootstrap/c++/ex03"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/bourgeois/Epitech/delivery/B4/B4 - Object-Oriented Programming/Arcade/bootstrap/c++/ex03/cmake-build-debug
