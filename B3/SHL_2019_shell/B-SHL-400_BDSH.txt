@@ -1,0 +1,151 @@
+Module : B-SHL-400
+Repository name : SHL_$YEAR_shell ($YEAR=2017 for 2017/2018)
+Repository rights : ramassage-tek
+Language : /bin/sh or /bin/bash
+Group Size : 1-2
+Authorized binary : /!\ See end of this file ! /!\
+Yammer Group : PSH $PROMO
+
+-------------------------------------------------------------------------------
+Warning : for all scripts, error messages must be send on stderr output, and
+program exit with error code 1 when error
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+Update 23/01/2018 - 10:35
+Before update :
+  ./bdsh -f file.json insert user id=4,firstname=Robert John,lastname=WILLIAMS
+After update :
+  ./bdsh -f file.json insert user id=4,firstname=Robert\ John,lastname=WILLIAMS
+-------------------------------------------------------------------------------
+
+
+Subject: 
+  Write a shell script that allows you to manage a database in a json file.
+  You must create table, insert-update-remove data, run query, ...
+		 
+Database File:
+  The database file can be specified in 3 ways, in order of priority:
+	as argument in command line : -f file
+    in environment : BDSH_File=
+    in a configuration file : .bdshrc
+	
+Program must display error when :
+	Syntax error in command line (bad arguments, ...)
+	Database already exist when create database
+	Can't create database (disc full, ...)
+	Table already exist when create table
+	Table not found when select, insert, ...
+	Fields not found when select, insert, ...
+	Select on empty database
+	...
+	
+Syntax:
+$> ./bdsh
+Usage: ./bdsh [OPTION]... [COMMAND] [REQUEST]
+OPTION:
+  -h				display usage
+  -f FILE			json database file
+  -j                json formated output for select command
+
+COMMAND and REQUEST:
+	create		create database
+			Exemple: 
+				./bdsh -f file.json create database
+				./bdsh -f file.json create table user id,firstname,lastname
+				./bdsh -f file.json create table age id,age
+
+	insert		insert data in database
+			Exemple:
+				./bdsh -f file.json insert user id=1,firstname=John,lastname=SMITH
+				./bdsh -f file.json insert user id=4,firstname=Robert\ John,lastname=WILLIAMS
+				./bdsh -f file.json insert user id=2,firstname=Lisa,lastname=SIMPSON
+				./bdsh -f file.json insert user id=10,lastname=SMITH
+				./bdsh -f file.json insert user firstname=Laura,lastname=SMITH
+				./bdsh -f file.json insert user id=9
+				./bdsh -f file.json insert age id=1,age=42
+
+	describe      describe table structure
+			Exemple:
+				./bdsh -f file.json describe user
+				id
+				firstname
+				lastname
+
+	select		display data from database
+			Exemple:
+				./bdsh -f file.json select user firstname,lastname
+				firstname    | lastname
+				-------------------------
+				John         | SMITH
+				Robert John  | WILLIAMS
+				Lisa         | SIMPSON
+				             | SMITH
+				Laura        | SMITH
+				             |
+				./bdsh -f file.json select user lastname,firstname order
+				lastname  | firstname
+				-------------------------
+				          |
+				SIMPSON   | Lisa
+				SMITH     |
+				SMITH     | John
+				SMITH     | Laura
+				WILLIAMS  | Robert John
+
+File Format :
+	Database file is a json file correctly formated.
+	Json file must contain 2 arrays for a table :
+		desc_$table : array with field list of table
+		data_$table : array with list : field:value
+		see sample.json in subject directory
+
+Shell:
+	Shell must be /bin/sh or /bin/bash (#shebang)
+
+-------------------------------------------------------------------------------
+
+Authorized binary :
+  * expr
+  * wc
+  * head
+  * tail
+  * cat
+  * sort
+  * grep
+  * sed
+  * cut
+  * tr
+  * touch
+ 
+ -------------------------------------------------------------------------------
+ 
+Bonus :
+		Add many query, join, where, ...
+		
+		Exemple:
+ 
+				./bdsh -f file.json select user,age age,firstname,lastname join id where age=42
+				age  | firstname  | lastname
+				------------------------------
+				42   | John       | SMITH
+				
+				./bdsh -f file.json update user firstname=Marry where firstname=John
+				./bdsh -f file.json update user lastname=DAVIS,firstname=Marge where id=9
+				
+				./bdsh -f file.json delete user where lastname=SMITH
+				3 row(s) deleted
+				
+				./bdsh -f file.json select user firstname,id where lastname=SMITH
+				firstname  | id
+				-----------------
+				John       | 1
+				           | 10
+				Laura      |
+				
+				./bdsh -f file.json select user firstname, lastname where lastname=SMITH order
+				firstname  | lastname  
+				-----------------------
+				           | SMITH
+				John       | SMITH
+				Laura      | SMITH
